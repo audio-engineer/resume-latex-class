@@ -1,125 +1,129 @@
+% cSpell:disable
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{resume}[2024/11/19 Resume LaTeX class]
+\ProvidesClass{resume}[2025/09/05 Resume LaTeX class]
 
+% kvoptions
+\RequirePackage{kvoptions}
+
+\SetupKeyvalOptions{
+    family=resume,
+    prefix=res@
+}
+
+\DeclareVoidOption{english}{\def\res@mainlang{english}}
+\DeclareVoidOption{danish}{\def\res@mainlang{danish}}
+\providecommand\res@mainlang{english}
+
+\DeclareStringOption[2cm]{top}
+\DeclareStringOption[2cm]{bottom}
+
+\ProcessKeyvalOptions*
+
+% Packages
 \LoadClass[10pt]{article}
 
-\DeclareOption{danish}{\PassOptionsToPackage{danish}{babel}}
-\DeclareOption{english}{\PassOptionsToPackage{english}{babel}}
+\RequirePackage[main=\res@mainlang, english, danish]{babel}
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{geometry, changepage, fontspec, microtype, enumitem, fancyhdr, tabularx, fontawesome5, environ, hyperref}
 
-\ExecuteOptions{english}
-\ProcessOptions\relax
+% Font
+\defaultfontfeatures{Ligatures=TeX, Scale=MatchLowercase}
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}
+\setmonofont{Fira Mono}
 
-\RequirePackage[
+% Geometry
+\geometry{
     a4paper,
     nomarginpar,
     includehead,
     includefoot,
-    headheight=1.8cm,
-    headsep=0.5cm,
-    top=2cm,
-    bottom=2cm,
+    headheight=2.3cm,
+    footskip=0.5cm,
+    headsep=0.2cm,
+    top=\res@top,
+    bottom=\res@bottom,
     left=2cm,
     right=2cm,
-% showframe
-]{geometry}
-\RequirePackage{hyphenat}
-\RequirePackage{hyperref}
-\RequirePackage{textcomp}
-\RequirePackage{tabularx}
-\RequirePackage{fancyhdr}
-\RequirePackage{changepage}
-\RequirePackage{environ}
-\RequirePackage{enumitem}
-\RequirePackage{fontawesome5}
+    % showframe
+}
 
+% Hyperref
 \hypersetup{
     colorlinks=true,
+    linkcolor=DarkRed,
+    urlcolor=RoyalBlue,
     pdfborder={0 0 0}
 }
 
-\raggedright{}
-
-\pagestyle{fancy}
-\fancyhead{}
-\fancyfoot{}
-
 % Remove spacing before and after itemize
-\setlist{nosep,before=,after=}
+\setlist{nosep, before=\raggedright, after=\relax, itemsep=1pt}
 
-% Remove header divider line
-\renewcommand{\headrulewidth}{0pt}
-
-% Variable for spacing under segments
-\newcommand{\spaceunder}{\vspace*{1.1em}}
+% Header and Footer
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt} % Remove header divider line
+\fancyfoot[C]{\thepage} % Add page number
 
 % Print comma-separated list as dot-separated list
-\ExplSyntaxOn{}
-\newcommand{\printdotlist}[1]
+\ExplSyntaxOn
+\seq_new:N \l_resume_tmpa_seq
+\NewDocumentCommand\printdotlist{m}
 {
-    \seq_set_split:Nnn \l_tmpa_seq {,} { #1 }
-    \seq_use:Nn \l_tmpa_seq { ~\(\cdot\)~ }
+    \seq_set_split:Nnn \l_resume_tmpa_seq {,} { #1 }
+    \seq_use:Nn \l_resume_tmpa_seq {~\textperiodcentered{}~}
 }
-\ExplSyntaxOff{}
+\ExplSyntaxOff
 
 % Horizontal line under section headers
-\newcommand{\lineunder}{%
-    \vspace*{-8pt} \\
-    \hrulefill{} \\
-}
+\newcommand\lineunder{\vspace*{-0.6\baselineskip}\noindent\hrulefill\par}
 
 % Header
-\newcommand{\header}[3]{%
+\NewDocumentCommand\header{m m m}{
     \fancyhead[C]{%
-            {\LARGE \scshape {#1}} \\
-        \vspace*{2mm}
-        {\Large #2} \\
-        \vspace*{2mm}
-        \printdotlist{#3}
+        {\LARGE\scshape #1\par}%
+            {\Large \printdotlist{#2}\par\addvspace{0.4\baselineskip}}%
+        \printdotlist{#3}%
     }
 }
 
 % Section header
-\newcommand{\sectionheader}[1]{{\large\textsc{#1}}\lineunder\vspace{0em}}
+\NewDocumentCommand\sectionheader{m}{
+    \addvspace{0.5\baselineskip}%
+    {\large\textsc{#1}}\par\lineunder
+}
 
 % Section content wrapper
 \NewEnviron{sectioncontent}[1]{%
-    \sectionheader{#1}
-    \begin{adjustwidth}{1.5em}{0pt}
-        \BODY{}
+    \raggedright\sectionheader{#1}%
+    \begin{adjustwidth}{1.5em}{0pt}%
+        \BODY
     \end{adjustwidth}
-    \spaceunder{}
 }
 
 % Section content with title, city, details, and from and to dates
-\newcommand{\sectionwithdetails}[5][]{%
-    \textbf{#2} \hfill #3 \\
-    #1 \hfill #4--- #5 \\
+\NewDocumentCommand\sectionwithdetails{O{} m m m m}{
+    \textbf{#2}\hfill #3\par
+    #1\hfill #4\textendash{}#5\par
 }
 
 % Experience entry
-\newenvironment{experience}[5]{%
-    \sectionwithdetails[\textit{#3}]{#1}{#2}{#4}{#5}
-    }{}
+\NewEnviron{experience}[5]{%
+    \sectionwithdetails[\textit{#3}]{#1}{#2}{#4}{#5}%
+    \BODY
+}
 
 % Skills
-\newcommand{\skills}[4]{%
-    \begin{minipage}[t]{.49\linewidth}
-    \raggedright{}
-    \textbf{#1} \\
-    #2
-    \end{minipage}
-    \hfill
-    \begin{minipage}[t]{.49\linewidth}
-    \raggedright{}
-    \textbf{#3} \\
-    #4
-    \end{minipage}
+\NewDocumentCommand\skills{m m m m m m m m}{
+    \begin{minipage}[t]{.24\linewidth}\raggedright\textbf{#1}\par #2\end{minipage}\hfill
+    \begin{minipage}[t]{.24\linewidth}\raggedright\textbf{#3}\par #4\end{minipage}\hfill
+    \begin{minipage}[t]{.24\linewidth}\raggedright\textbf{#5}\par #6\end{minipage}\hfill
+    \begin{minipage}[t]{.24\linewidth}\raggedright\textbf{#7}\par #8\end{minipage}
 }
 
 % Project
-\newcommand{\project}[4]{%
-    \textbf{#1}\(\cdot\) \printdotlist{#2} \\
-    \textit{#3} \\
-    \vspace*{0.5em}
-    #4
+\NewDocumentCommand\project{m m m m}{
+    \textbf{#1}\(\cdot\) \printdotlist{#2}\par
+    \textit{#3}\par\smallskip
+    #4\par
 }
