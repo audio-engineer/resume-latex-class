@@ -1,20 +1,30 @@
 % cSpell:disable
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{coverletter}[2025/08/11 Cover Letter LaTeX class]
+\ProvidesClass{coverletter}[2025/11/06 Cover Letter LaTeX class]
 
-% Options
-\DeclareOption{english}{\def\coverletter@mainlang{english}}
-\DeclareOption{danish}{\def\coverletter@mainlang{danish}}
-\DeclareOption*{\PassOptionsToPackage{\CurrentOption}{babel}}
-\ExecuteOptions{english}
-\ProcessOptions\relax
+% kvoptions
+\RequirePackage{kvoptions}
+
+\SetupKeyvalOptions{
+    family=coverletter,
+    prefix=cov@
+}
+
+\DeclareVoidOption{english}{\def\cov@mainlang{english}}
+\DeclareVoidOption{danish}{\def\cov@mainlang{danish}}
+\providecommand\cov@mainlang{english}
+
+\DeclareStringOption[2cm]{top}
+\DeclareStringOption[2cm]{bottom}
+
+\ProcessKeyvalOptions*
 
 % Packages
 \LoadClass[10pt]{article}
 
-\RequirePackage[main=\coverletter@mainlang, english, danish]{babel}
+\RequirePackage[main=\cov@mainlang, english, danish]{babel}
 \RequirePackage[dvipsnames]{xcolor}
-\RequirePackage{geometry, fontspec, microtype, fancyhdr, environ, parskip, graphicx, hyperref}
+\RequirePackage{geometry, fontspec, microtype, fancyhdr, enumitem, environ, parskip, graphicx, hyperref}
 
 % Font
 \defaultfontfeatures{Ligatures=TeX, Scale=MatchLowercase}
@@ -28,7 +38,11 @@
     includehead,
     includefoot,
     headheight=4.2cm,
+    footskip=0.5cm,
+    headsep=0.2cm,
     margin=1in,
+    top=\cov@top,
+    bottom=\cov@bottom,
     % showframe
 }
 
@@ -39,6 +53,9 @@
     urlcolor=RoyalBlue,
     pdfborder={0 0 0}
 }
+
+% Remove spacing before and after itemize
+\setlist{nosep, before=\raggedright, after=\relax, itemsep=1pt}
 
 % Data
 \newcommand\coverletter@def[2]{\expandafter\def\csname #1\endcsname{#2}}
@@ -104,15 +121,14 @@
     \begingroup
     \raggedright
     \@letterdate\par
-    \addvspace{\baselineskip}
     {\bfseries \@recipientname}\par
     \@recipientaddr\par
     \endgroup
-    \addvspace{2\baselineskip}
+    \addvspace{\baselineskip}
 
     % Subject
     {\Large\bfseries \@subject}\par
-    \addvspace{2\baselineskip}
+    \addvspace{\baselineskip}
 
     % Greeting
     \@greeting\par
