@@ -63,7 +63,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt} % Remove header divider line
-\fancyfoot[C]{\thepage} % Add page number
+% \fancyfoot[C]{\thepage} % Add page number
 
 % Print comma-separated list as dot-separated list
 \ExplSyntaxOn
