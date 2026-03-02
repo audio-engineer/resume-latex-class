@@ -1,6 +1,6 @@
 % cSpell:disable
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{coverletter}[2025/11/06 Cover Letter LaTeX class]
+\ProvidesClass{coverletter}[2026/03/02 Cover Letter LaTeX class]
 
 % kvoptions
 \RequirePackage{kvoptions}
@@ -14,8 +14,10 @@
 \DeclareVoidOption{danish}{\def\cov@mainlang{danish}}
 \providecommand\cov@mainlang{english}
 
-\DeclareStringOption[2cm]{top}
-\DeclareStringOption[2cm]{bottom}
+\DeclareStringOption[1in]{top}
+\DeclareStringOption[1in]{bottom}
+\DeclareStringOption[1in]{left}
+\DeclareStringOption[1in]{right}
 
 \ProcessKeyvalOptions*
 
@@ -40,9 +42,10 @@
     headheight=4.2cm,
     footskip=0.5cm,
     headsep=0.2cm,
-    margin=1in,
     top=\cov@top,
     bottom=\cov@bottom,
+    left=\cov@left,
+    right=\cov@right,
     % showframe
 }
 

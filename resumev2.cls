@@ -1,6 +1,6 @@
 % cSpell:disable
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{resumev2}[2026/02/27 Resume LaTeX class]
+\ProvidesClass{resumev2}[2026/03/02 Resume LaTeX class]
 
 % kvoptions
 \RequirePackage{kvoptions}
@@ -22,10 +22,10 @@
 \res@copyfixfalse
 \DeclareVoidOption{copyfix}{\res@copyfixtrue}
 
-\DeclareStringOption[2cm]{top}
-\DeclareStringOption[2cm]{bottom}
-\DeclareStringOption[2cm]{left}
-\DeclareStringOption[2cm]{right}
+\DeclareStringOption[1in]{top}
+\DeclareStringOption[1in]{bottom}
+\DeclareStringOption[1in]{left}
+\DeclareStringOption[1in]{right}
 
 \ProcessKeyvalOptions*
 
