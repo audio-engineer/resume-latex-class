@@ -1,5 +1,7 @@
+QuoteStyle = Traditional
+
 CmdLine
 {
--n 1
--v
+    -q
+    -v2
 }
