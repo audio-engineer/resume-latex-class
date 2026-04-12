@@ -1,6 +1,6 @@
 % cSpell:disable
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{coverletter}[2026/03/02 Cover Letter LaTeX class]
+\ProvidesClass{coverletter}[2026/04/12 Cover Letter LaTeX class]
 
 % kvoptions
 \RequirePackage{kvoptions}
@@ -26,7 +26,7 @@
 
 \RequirePackage[main=\cov@mainlang, english, danish]{babel}
 \RequirePackage[dvipsnames]{xcolor}
-\RequirePackage{geometry, fontspec, microtype, fancyhdr, enumitem, environ, parskip, graphicx, hyperref}
+\RequirePackage{geometry, fontspec, microtype, fancyhdr, enumitem, environ, parskip, csquotes, graphicx, hyperref}
 
 % Font
 \defaultfontfeatures{Ligatures=TeX, Scale=MatchLowercase}

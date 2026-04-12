@@ -1,6 +1,6 @@
 % cSpell:disable
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{resumev2}[2026/03/02 Resume LaTeX class]
+\ProvidesClass{resumev2}[2026/04/12 Resume LaTeX class]
 
 % kvoptions
 \RequirePackage{kvoptions}
@@ -41,6 +41,7 @@
 
 \RequirePackage{
     geometry,
+    csquotes,
     changepage,
     fontspec,
     microtype,
